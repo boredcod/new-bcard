@@ -20,7 +20,20 @@ function IdForm (){
       return res.json()
     }).then(info=> setInfo(info));
   });
- 
+
+  function _post(un){
+    return fetch(`${databaseURL}/Test.json`, {
+      method: 'POST',
+      body: JSON.stringify(un)
+    }).then(res => {
+      if(res.status !==200) {
+        throw new Error(res.statusText);
+      }
+      return res.json();
+    }).then(data => {
+        console.log(data);
+    });
+  }
   return (log_in ? <Profile /> : (
     <SafeAreaView>
       <TextInput
@@ -33,7 +46,7 @@ function IdForm (){
         onChangeText={(password) => setPassword(password)}
         placeholder="Password"
       />
-      <Pressable style={styles.login} onPress= {() => {alert(info);logIndone(true);}}><Text style={styles.textStyle}>Log in</Text></Pressable>
+      <Pressable style={styles.login} onPress= {() => {_post([username,password]);logIndone(true);}}><Text style={styles.textStyle}>Log in</Text></Pressable>
     </SafeAreaView>
   ) );
 }
