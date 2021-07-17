@@ -2,7 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
 import IdMake from "./id-make";
-import IdForm from "./id-form";
+import RegisterMake from "./register-make";
+
+
 
 
 let id = true;
@@ -19,7 +21,7 @@ export default class App extends React.Component{
       <View style = {styles.halfContainer}>
         <View style = {styles.halfContainer}>
           <Text>
-            {this.state.createID ? <IdMake /> : this.responseNo()}
+            {this.state.createID ? <IdMake /> :<RegisterMake />}
           </Text>
           <Text>
 
