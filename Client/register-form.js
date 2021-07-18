@@ -1,20 +1,14 @@
 import React, {useState, useEffect} from "react";
-import axios from 'axios';
 import { SafeAreaView, StyleSheet, TextInput, Pressable, Text} from "react-native";
-import Profile from './profile';
 import { firebase } from './firebase-config';
 
-const databaseURL = "https://b-card-c6533-default-rtdb.firebaseio.com/"
+
 
 export default function RegisterForm (){
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConformPassword] = useState("");
-  const [info,setInfo] = useState("");
-  const [log_in, logIndone] = useState(false);
   const [fullname, setFullname] = useState("");
-
-
 
 
   const onRegisterPress = () => {
@@ -37,7 +31,7 @@ export default function RegisterForm (){
                 .doc(uid)
                 .set(data)
                 .then(() => {
-                    navigation.navigate('Home', {user: data})
+                    console.log('firestore worked')
                 })
                 .catch((error) => {
                     alert(error)
@@ -46,7 +40,7 @@ export default function RegisterForm (){
         .catch((error) => {
             alert(error)
     });
-}
+    }
   return ((
     <SafeAreaView>
         <TextInput

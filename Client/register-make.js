@@ -1,21 +1,48 @@
-import React, { Component } from "react";
+import React, { Component, useState} from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput} from "react-native";
 import RegisterForm from "./register-form";
 import Profile from "./profile";
+import { firebase } from './firebase-config';
 
 
-export default class RegisterMake extends Component {
-  state = {
-    modalVisible: false
-  };
+export default function RegisterMake (){
+  const [modalVisible, setModalVisible] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConformPassword] = useState("");
+  const [fullname, setFullname] = useState("");
 
+  const onRegisterPress = () => {
+    if (password !== confirmPassword) {
+        alert("Passwords don't match.")
+        return
+    }
+    firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((response) => {
+            const uid = response.user.uid
+            const data = {
+                id: uid,
+                email,
+                fullname,
+            };
+            const usersRef = firebase.firestore().collection('users')
+            usersRef
+                .doc(uid)
+                .set(data)
+                .then(() => {
+                    setModalVisible(false);
+                })
+                .catch((error) => {
+                    alert(error)
+                });
+        })
+        .catch((error) => {
+            alert(error)
+    });
+    }
 
-  setModalVisible = (visible) => {
-    this.setState({ modalVisible: visible });
-  }
-
-  render() {
-    const { modalVisible } = this.state;
     return ( 
       <View style={styles.centeredView}>
         <Modal
@@ -24,17 +51,39 @@ export default class RegisterMake extends Component {
           visible={modalVisible}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
-            this.setModalVisible(!modalVisible);
+            setModalVisible(!modalVisible);
           }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <RegisterForm/>
+                <SafeAreaView>
+                    <TextInput
+                    style={styles.input}
+                    onChangeText={(fullname) => setFullname(fullname)}
+                    placeholder="fullname"
+                    />
+                    <TextInput
+                    style={styles.input}
+                    onChangeText={(email) => setEmail(email)}
+                    placeholder="Email"
+                    />
+                    <TextInput
+                    style={styles.input}
+                    onChangeText={(password) => setPassword(password)}
+                    placeholder="Password"
+                    />
+                    <TextInput
+                    style={styles.input}
+                    onChangeText={(confirmpassword) => setConformPassword(confirmpassword)}
+                    placeholder="Confirm Password"
+                    />
+                    <Pressable style={styles.login} onPress= {() => onRegisterPress()}><Text style={styles.textStyle}>Log in</Text></Pressable>
+                </SafeAreaView>
               
-              <Pressable
+                <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => this.setModalVisible(!modalVisible)}
-              >
+                onPress={() => setModalVisible(!modalVisible)}
+                >
                 <Text style={styles.textStyle}>Close</Text>
               </Pressable>
             </View>
@@ -42,13 +91,12 @@ export default class RegisterMake extends Component {
         </Modal>
         <Pressable
           style={[styles.button, styles.buttonOpen]}
-          onPress={() => {this.setModalVisible(true);}}
+          onPress={() => {setModalVisible(true);}}
         >
           <Text style={styles.textStyle}>Register</Text>
         </Pressable>
       </View>
     );
-  }
 }
 
 const styles = StyleSheet.create({
@@ -101,6 +149,26 @@ const styles = StyleSheet.create({
     marginTop: 10,
     elevation: 2,
     backgroundColor: "#2196F3"
+  },
+  input: {
+    height: 40,
+    margin: 5,
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    paddingHorizontal: 40
+  },
+  login: {
+    borderRadius: 10,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    marginTop: 10,
+    elevation: 2,
+    backgroundColor: "#2196F3"
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
   }
 });
 
