@@ -1,24 +1,43 @@
-import React, { Component } from "react";
+import React, { Component, useState} from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput} from "react-native";
-import IdForm from "./id-form";
+import RegisterForm from "./register-form";
 import Profile from "./profile";
+import { firebase } from './firebase-config';
 
 
-class IdMake extends Component {
-  state = {
-    modalVisible: false
-  };
+export default function RegisterMake (){
+  const [modalVisible, setModalVisible] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+ 
 
-  getLoginState = () => {
-    return this.state.log_in;
-  }
-  setModalVisible = (visible) => {
-    console.log("yo");
-    this.setState({ modalVisible: visible });
-  }
+  const onLoginPress = () => {
+    firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((response) => {
+            const uid = response.user.uid
+            const usersRef = firebase.firestore().collection('users')
+            usersRef
+                .doc(uid)
+                .get()
+                .then(firestoreDocument => {
+                    if (!firestoreDocument.exists) {
+                        alert("User does not exist anymore.")
+                        return;
+                    }
+                    const user = firestoreDocument.data();
+                    setModalVisible(false);
+                })
+                .catch(error => {
+                    alert(error)
+                });
+        })
+        .catch(error => {
+            alert(error)
+        })
+}
 
-  render() {
-    const { modalVisible } = this.state;
     return ( 
       <View style={styles.centeredView}>
         <Modal
@@ -27,17 +46,29 @@ class IdMake extends Component {
           visible={modalVisible}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
-            this.setModalVisible(!modalVisible);
+            setModalVisible(!modalVisible);
           }}
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <IdForm/>
+                <SafeAreaView>
+                    <TextInput
+                    style={styles.input}
+                    onChangeText={(email) => setEmail(email)}
+                    placeholder="Email"
+                    />
+                    <TextInput
+                    style={styles.input}
+                    onChangeText={(password) => setPassword(password)}
+                    placeholder="Password"
+                    />
+                    <Pressable style={styles.login} onPress= {() => onLoginPress()}><Text style={styles.textStyle}>Log in</Text></Pressable>
+                </SafeAreaView>
               
-              <Pressable
+                <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => this.setModalVisible(!modalVisible)}
-              >
+                onPress={() => setModalVisible(!modalVisible)}
+                >
                 <Text style={styles.textStyle}>Close</Text>
               </Pressable>
             </View>
@@ -45,13 +76,12 @@ class IdMake extends Component {
         </Modal>
         <Pressable
           style={[styles.button, styles.buttonOpen]}
-          onPress={() => {this.setModalVisible(true);}}
+          onPress={() => {setModalVisible(true);}}
         >
-          <Text style={styles.textStyle}>Log in</Text>
+          <Text style={styles.textStyle}>Log-in</Text>
         </Pressable>
       </View>
     );
-  }
 }
 
 const styles = StyleSheet.create({
@@ -104,7 +134,26 @@ const styles = StyleSheet.create({
     marginTop: 10,
     elevation: 2,
     backgroundColor: "#2196F3"
+  },
+  input: {
+    height: 40,
+    margin: 5,
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    paddingHorizontal: 40
+  },
+  login: {
+    borderRadius: 10,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    marginTop: 10,
+    elevation: 2,
+    backgroundColor: "#2196F3"
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
   }
 });
 
-export default IdMake;
