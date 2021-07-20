@@ -1,44 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Button, Text, View } from 'react-native';
-import IdMake from "./id-make";
-import RegisterMake from "./register-make";
 
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, Button, Text, View } from 'react-native';
+import { firebase } from './firebase-config';
+import NotLogged from "./notloggedinpage";
+import Mainpage from "./mainpage";
 
 
 
 let id = true;
-export default class App extends React.Component{
-  state = {
-    createID: false
-  };
-  responseNo (){
-    return (<Text> Looks like you do not have ID. Want one ?</Text>);
-  }
-  render() {
-    return (
-    <View style={styles.container}>
-      <View style = {styles.halfContainer}>
-        <View style = {styles.halfContainer}>
-          <Text>
-            {this.state.createID ? <IdMake /> :<RegisterMake />}
-          </Text>
-          <Text>
-
-          </Text>
-        </View>
-        <View style = {styles.halfContainer}>
-            <View style = {styles.horButtons}>
-              <Button title= "Yes Button" onPress= {()=> {console.log(id);this.setState({createID:true});}}></Button>
-              <Button title= "No Button" onPress= {()=> {console.log(id);this.setState({createID:false});}}></Button>
-            </View>
-        </View>
-        <StatusBar style="auto" />
-      </View>
-      <View style = {styles.halfContainer}></View>
-    </View>
-    );
-  }
+export default function App () { 
+  const [loggedIn, setLoggedIn] = useState(false);
+  useEffect(() => {
+    const usersRef = firebase.firestore().collection('users');
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        usersRef
+          .doc(user.uid)
+          .get()
+          .then((document) => {
+            const userData = document.data()
+            setLoggedIn(true);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log("not loaded");
+      }
+    });
+  }, []);
+  return (loggedIn ? <Mainpage /> : <NotLogged />)
 }
 
 const styles = StyleSheet.create({

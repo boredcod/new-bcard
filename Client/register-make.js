@@ -1,7 +1,5 @@
 import React, { Component, useState} from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput} from "react-native";
-import RegisterForm from "./register-form";
-import Profile from "./profile";
 import { firebase } from './firebase-config';
 
 

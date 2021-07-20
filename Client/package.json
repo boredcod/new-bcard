@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-navigation/native": "^5.9.4",
     "axios": "^0.21.1",
     "expo": "~41.0.1",
     "expo-linear-gradient": "^9.1.0",
