@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
 import IdMake from "./id-make";
 import RegisterMake from "./register-make";
+import { useFonts } from 'expo-font';
 import { firebase } from './firebase-config';
 import ProfilePage from "./profile-page"
 
@@ -11,29 +12,20 @@ import ProfilePage from "./profile-page"
 let id = true;
 export default function NotLogged () { 
   const [createID, setCreateID] = useState(false);
-
- 
- 
   return (
     <View style={styles.container}>
-      <View style = {styles.halfContainer}>
         <View style = {styles.halfContainer}>
-          <Text>
-          {createID ? <IdMake /> :<RegisterMake />}
-          </Text>
-          <Text>
-
-          </Text>
+            <Text style={styles.bFont}>
+                B-Card
+            </Text>
         </View>
         <View style = {styles.halfContainer}>
             <View style = {styles.horButtons}>
-              <Button title= "Yes Button" onPress= {()=> {console.log(id);setCreateID(true);}}></Button>
-              <Button title= "No Button" onPress= {()=> {console.log(id);setCreateID(false);}}></Button>
+                <IdMake/>
+                <RegisterMake/>
             </View>
         </View>
         <StatusBar style="auto" />
-      </View>
-      <View style = {styles.halfContainer}></View>
     </View>
     );
 }
@@ -58,5 +50,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row'
+  },
+  bFont: {
+    fontFamily: 'Roboto-Mono'
   }
 });

@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, Button, Text, View } from 'react-native';
 import { firebase } from './firebase-config';
 import NotLogged from "./notloggedinpage";
+import Profile from "./profile";
 import Mainpage from "./mainpage";
 
 
@@ -29,7 +30,25 @@ export default function App () {
       }
     });
   }, []);
-  return (loggedIn ? <Mainpage /> : <NotLogged />)
+  const signOut = () => {
+    firebase.auth().signOut().then(() => {
+        console.log("signout")
+        setLoggedIn(false);
+      }).catch((error) => {
+        console.log(error)
+      });
+      
+}
+  return (loggedIn ? (
+    <View style = {styles.profileLogout}>
+        <Profile/>
+        <Button
+            title="Log out"
+            onPress={() => signOut()}
+       
+        />
+    </View>
+) : <NotLogged />)
 }
 
 const styles = StyleSheet.create({
@@ -40,8 +59,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column'
   },
+  profileLogout:{
+    flexDirection: 'row',
+    marginTop: 50
+  },
   halfContainer: {
     flex: 1, 
+    flexDirection: 'row',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'

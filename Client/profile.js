@@ -1,28 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Profiler } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Image, Platform} from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import ProfileImage from './profile-image'
 import { firebase } from './firebase-config';
 
 export default function Profile(){
-    const signOut = () => {
-        firebase.auth().signOut().then(() => {
-            console.log("signout")
-          }).catch((error) => {
-            // An error happened.
-          });
-          
-    }
-    return (
-        
-        <View style = {styles.container}>
-            <Text>Name</Text>
-            <Text>Role</Text>
-            <Text>Company</Text>
-            <Button
-                title="Log out"
-                disabled
-                onPress={() => signOut()}
-            />
+    return (  
+        <View>
+            <ProfileImage />
         </View>
     );
 }
@@ -31,5 +17,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 50,
         marginLeft: 10
+    },
+    log_out: {
+        color: "#f194ff"
     }
 })
