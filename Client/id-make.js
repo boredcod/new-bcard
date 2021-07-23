@@ -1,14 +1,15 @@
-import React, { Component, useState} from "react";
+import React, { Component, useState, useEffect} from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput} from "react-native";
 import Profile from "./profile";
 import { firebase } from './firebase-config';
+import * as Font from 'expo-font';
 
 
 export default function RegisterMake (){
   const [modalVisible, setModalVisible] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
- 
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   const onLoginPress = () => {
     firebase
@@ -36,6 +37,7 @@ export default function RegisterMake (){
             alert(error)
         })
 }
+
 
     return ( 
       <View style={styles.centeredView}>
@@ -112,6 +114,8 @@ const styles = StyleSheet.create({
   },
   buttonOpen: {
     backgroundColor: "#A9A9A9",
+    marginTop: -100,
+    paddingHorizontal: 20
   },
   buttonClose: {
     backgroundColor: "#A9A9A9",
@@ -120,11 +124,13 @@ const styles = StyleSheet.create({
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: 'RobotoMonoLight',
+    fontSize: 20
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   login: {
     borderRadius: 20,
@@ -148,11 +154,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     elevation: 2,
     backgroundColor: "#2196F3"
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
   }
 });
 

@@ -4,6 +4,7 @@ import { StyleSheet, Button, Text, View } from 'react-native';
 import { firebase } from './firebase-config';
 import NotLogged from "./notloggedinpage";
 import Profile from "./profile";
+import * as Font from 'expo-font';
 import Mainpage from "./mainpage";
 
 
@@ -11,7 +12,23 @@ import Mainpage from "./mainpage";
 let id = true;
 export default function App () { 
   const [loggedIn, setLoggedIn] = useState(false);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  const loadFonts = async() =>{
+    await Font.loadAsync({
+      // Fix Fonts
+      'RobotoMonoLight': require('./fonts/RobotoMono-Light.ttf')
+    });
+    setFontsLoaded(true);
+    
+  }
   useEffect(() => {
+    // Fonts load
+    loadFonts();
+  });
+
+  useEffect(() => {
+    // Firebase user auth
     const usersRef = firebase.firestore().collection('users');
     firebase.auth().onAuthStateChanged(user => {
       if (user) {

@@ -126,6 +126,8 @@ const styles = StyleSheet.create({
   },
   buttonOpen: {
     backgroundColor: "#A9A9A9",
+    marginTop: -200,
+    paddingHorizontal: 20
   },
   buttonClose: {
     backgroundColor: "#A9A9A9",
@@ -134,11 +136,13 @@ const styles = StyleSheet.create({
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: 'RobotoMonoLight',
+    fontSize: 20
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
+    textAlign: "center",
   },
   login: {
     borderRadius: 20,
@@ -162,11 +166,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     elevation: 2,
     backgroundColor: "#2196F3"
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
   }
 });
+
+
 

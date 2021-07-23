@@ -4,7 +4,7 @@ import { StyleSheet, Button, Text, View } from 'react-native';
 import IdMake from "./id-make";
 import RegisterMake from "./register-make";
 import { useFonts } from '@use-expo/font';
-import Font from 'expo-font';
+import * as Font from 'expo-font';
 import { firebase } from './firebase-config';
 import ProfilePage from "./profile-page"
 
@@ -17,18 +17,16 @@ export default function NotLogged () {
 
   const loadFonts = async() =>{
     await Font.loadAsync({
-      // Load a font `Montserrat` from a static resource
-      // Any string can be used as the fontFamily name. Here we use an object to provide more control
-      "RobotoMono-Light": {
-        uri: require('./fonts/RobotoMono-Light.ttf'),
-        display: Font.FontDisplay.FALLBACK,
-      },
+      // Fix Fonts
+      'RobotoMonoLight': require('./fonts/RobotoMono-Light.ttf')
     });
     setFontsLoaded(true);
+    
   }
   useEffect(() => {
     // Update the document title using the browser API
     loadFonts();
+    console.log("fond loaded")
   });
   return (
     <View style={styles.container}>
@@ -65,12 +63,11 @@ const styles = StyleSheet.create({
   },
   horButtons: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
     alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row'
+    justifyContent: 'center'
   },
   bFont: {
+    fontFamily: "RobotoMonoLight",
     fontSize: 40
   }
 });
