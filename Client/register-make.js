@@ -1,6 +1,7 @@
-import React, { Component, useState} from "react";
+import React, { Component, useState, useEffect} from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput} from "react-native";
 import { firebase } from './firebase-config';
+import * as Font from 'expo-font';
 
 
 export default function RegisterMake (){
@@ -9,6 +10,21 @@ export default function RegisterMake (){
   const [password, setPassword] = useState("");
   const [confirmPassword, setConformPassword] = useState("");
   const [fullname, setFullname] = useState("");
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  const loadFonts = ()=> {
+    Font.loadAsync({
+      // Fix Fonts
+      'RobotoMonoLight': require('./fonts/RobotoMono-Light.ttf')
+    });
+    setFontsLoaded(true);
+    
+  }
+  useEffect(() => {
+    // Fonts load
+    loadFonts();
+  });
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
@@ -40,6 +56,7 @@ export default function RegisterMake (){
             alert(error)
     });
     }
+    
 
     return ( 
       <View style={styles.centeredView}>
@@ -75,7 +92,7 @@ export default function RegisterMake (){
                     onChangeText={(confirmpassword) => setConformPassword(confirmpassword)}
                     placeholder="Confirm Password"
                     />
-                    <Pressable style={styles.login} onPress= {() => onRegisterPress()}><Text style={styles.textStyle}>Log in</Text></Pressable>
+                    <Pressable style={styles.login} onPress= {() => onRegisterPress()}><Text style={styles.textStyle}>Register</Text></Pressable>
                 </SafeAreaView>
               
                 <Pressable
