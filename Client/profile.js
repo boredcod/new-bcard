@@ -6,6 +6,8 @@ import ProfileImage from './profile-image'
 import { firebase } from './firebase-config';
 
 export default function Profile(){
+    
+
     return (  
         <View>
             <ProfileImage />

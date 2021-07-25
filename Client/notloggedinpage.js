@@ -13,21 +13,6 @@ import ProfilePage from "./profile-page"
 let id = true;
 export default function NotLogged () { 
   const [createID, setCreateID] = useState(false);
-    const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  const loadFonts = async() =>{
-    await Font.loadAsync({
-      // Fix Fonts
-      'RobotoMonoLight': require('./fonts/RobotoMono-Light.ttf')
-    });
-    setFontsLoaded(true);
-    
-  }
-  useEffect(() => {
-    // Update the document title using the browser API
-    loadFonts();
-    console.log("fond loaded")
-  });
   return (
     <View style={styles.container}>
         <View style = {styles.halfContainer}>

@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Image, View, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { firebase } from './firebase-config';
 
 export default function ProfileImage() {
   const [image, setImage] = useState(null);
+  const imageUpload = () => {
+    
+    const storageRef = firebase.storage.ref();
+    const imageRef = storageRef.child(image.name);
+    imageRef.put(image).then(() => {
+      alert("Image uploaded successfully to Firebase.");
+  });
 
+  }
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -35,6 +44,7 @@ export default function ProfileImage() {
     <View>
     {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       <Button title="Pick an image from camera roll" onPress={pickImage} />
+      <Button title="Upload the image to database" onPress={imageUpload()} />
     </View>
   );
 }
