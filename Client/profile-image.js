@@ -7,6 +7,7 @@ export default function ProfileImage() {
     const [image, setImage] = useState(null);
     const usersRef = firebase.firestore().collection('users');
     const [currentUserId, setCurrentUserId] = useState("");
+    const [imageExists, setimageExists] = useState(false);
 
     const getCurrentUser = () => {
         firebase.auth().onAuthStateChanged(user => {
@@ -46,21 +47,23 @@ export default function ProfileImage() {
         })();
     }, []);
 
+
     const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-    });
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
 
 
-    if (!result.cancelled) {
-        setImage(result.uri);
-        getCurrentUser();
-        imageUpload(result.uri, currentUserId);
-    }
+        if (!result.cancelled) {
+            setImage(result.uri);
+            getCurrentUser();
+            imageUpload(result.uri, currentUserId);
+        }
     };
+
 
     return (
     <View>
