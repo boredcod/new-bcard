@@ -2,14 +2,28 @@ import React, { Component, useState, useEffect} from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput} from "react-native";
 import Profile from "./profile";
 import { firebase } from './firebase-config';
-import * as Font from 'expo-font';
+
 
 
 export default function RegisterMake (){
   const [modalVisible, setModalVisible] = useState(false)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  const loadFonts = async() =>{
+    await Font.loadAsync({
+      // Fix Fonts
+      'RobotoMonoLight': require('./fonts/RobotoMono-Light.ttf')
+    });
+    setFontsLoaded(true);
+    
+  }
+  useEffect(() => {
+    // Fonts load
+    loadFonts();
+  });
 
   const onLoginPress = () => {
     firebase
