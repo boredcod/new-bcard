@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect} from "react";
 import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput} from "react-native";
 import Profile from "./profile";
 import { firebase } from './firebase-config';
+import * as Font from 'expo-font';
 
 
 
@@ -145,14 +146,6 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
-  },
-  login: {
-    borderRadius: 20,
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    marginTop: 10,
-    elevation: 2,
-    backgroundColor: "#2196F3"
   },
   input: {
     height: 40,

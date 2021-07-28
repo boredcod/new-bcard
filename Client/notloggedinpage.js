@@ -6,13 +6,28 @@ import RegisterMake from "./register-make";
 import { useFonts } from '@use-expo/font';
 import * as Font from 'expo-font';
 import { firebase } from './firebase-config';
-import ProfilePage from "./profile-page"
+
 
 
 
 let id = true;
 export default function NotLogged () { 
   const [createID, setCreateID] = useState(false);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  const loadFonts = async() =>{
+    await Font.loadAsync({
+      // Fix Fonts
+      'RobotoMonoLight': require('./fonts/RobotoMono-Light.ttf')
+    });
+    setFontsLoaded(true);
+    
+  }
+  useEffect(() => {
+    // Fonts load
+    loadFonts();
+  });
+
   return (
     <View style={styles.container}>
         <View style = {styles.halfContainer}>
