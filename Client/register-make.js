@@ -10,6 +10,9 @@ export default function RegisterMake (){
   const [password, setPassword] = useState("");
   const [confirmPassword, setConformPassword] = useState("");
   const [fullname, setFullname] = useState("");
+  const company = "";
+  const title = "";
+  const phone = "";
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -18,8 +21,6 @@ export default function RegisterMake (){
       // Fix Fonts
       'RobotoMonoLight': require('./fonts/RobotoMono-Light.ttf')
     });
-    setFontsLoaded(true);
-    
   }
   useEffect(() => {
     // Fonts load
@@ -40,6 +41,9 @@ export default function RegisterMake (){
                 id: uid,
                 email,
                 fullname,
+                company,
+                title,
+                phone
             };
             const usersRef = firebase.firestore().collection('users')
             usersRef

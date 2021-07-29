@@ -5,14 +5,13 @@ import { firebase } from './firebase-config';
 import NotLogged from "./notloggedinpage";
 import Profile from "./profile";
 import * as Font from 'expo-font';
-import LandingPage from './LandingPage';
 import Mainpage from "./mainpage";
 
 
 
 
 let id = true;
-export default function App () { 
+export default function LandingPage () { 
   const [loggedIn, setLoggedIn] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -28,7 +27,46 @@ export default function App () {
     // Fonts load
     loadFonts();
   });
-    return (fontsLoaded ? <LandingPage /> : (<View><Text>Loading</Text></View>))
+
+  useEffect(() => {
+    // Firebase user auth
+    const usersRef = firebase.firestore().collection('users');
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        usersRef
+          .doc(user.uid)
+          .get()
+          .then((document) => {
+            const userData = document.data()
+            setLoggedIn(true);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        console.log("not loaded");
+      }
+    });
+  }, []);
+  const signOut = () => {
+    firebase.auth().signOut().then(() => {
+        console.log("signout")
+        setLoggedIn(false);
+      }).catch((error) => {
+        console.log(error)
+      });
+      
+}
+    return (loggedIn ? (
+      <View style = {styles.profileLogout}>
+        <Profile/>
+        <Button
+            title="Log out"
+            onPress={() => signOut()}
+       
+        />
+      </View>
+    ) : <NotLogged />)
 } 
 
 const styles = StyleSheet.create({
