@@ -11,6 +11,7 @@ export default function Profile(){
     const [currentUserCompany, setCurrentUserCompany] = useState("");
     const [currentUserPhone, setCurrentUserPhone] = useState("");
     const [currentUserTitle, setCurrentUserTitle] = useState("");
+    const [name, setName] = useState("");
     useEffect(()=>{
         firebase.auth().onAuthStateChanged(user => {
         const usersRef = firebase.firestore().collection('users');
@@ -21,8 +22,10 @@ export default function Profile(){
             .then((document) => {
                 const userEmail = document.data().email
                 const userId = document.data().id
+                const userName = document.data().fullname
                 setCurrentUserEmail(userEmail)
                 setCurrentUserId(userId)
+                setName(userName)
 
             })
             .catch((error) => {
@@ -33,6 +36,18 @@ export default function Profile(){
         }
         })
     })
+    const updateDoc = () => {
+        const usersRef = firebase.firestore().collection('users').doc(currentUserId);
+        usersRef.update({
+            company: currentUserCompany,
+            phone: currentUserPhone,
+            title: currentUserTitle
+        }).then(()=>{
+            alert("data successfully updated")
+        }).catch((error) => {
+            alert("error")
+        })
+    }
 
     return (  
         <View>
@@ -53,15 +68,21 @@ export default function Profile(){
                     onChangeText={(phone) => setCurrentUserPhone(phone)}
                     placeholder="phone number"
                 />
+                <Text style={styles.input}>
+                    {name}
+                </Text>
+                <Button
+                    onPress={updateDoc}
+                    title="Update The Information"
+                    color="#841584"
+                />
             </SafeAreaView>
         </View>
     );
 }
 const styles = StyleSheet.create({
     container : {
-        justifyContent: 'center',
-        marginTop: 50,
-        marginLeft: 10
+        justifyContent: 'center'
     },
     log_out: {
         color: "#f194ff"

@@ -59,10 +59,11 @@ export default function LandingPage () {
 }
     return (loggedIn ? (
       <View style = {styles.profileLogout}>
-        <Profile/>
+        <Profile />
         <Button
             title="Log out"
             onPress={() => signOut()}
+            color="#f194ff"
        
         />
       </View>
@@ -78,8 +79,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   profileLogout:{
-    flexDirection: 'row',
-    marginTop: 50
+    flexDirection: 'column',
+    marginTop: 50,
+    flex: 1,
   },
   halfContainer: {
     flex: 1, 

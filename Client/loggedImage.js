@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, Button, Image, View, Platform } from 'react-native';
+import { Text, Button, Image, View, Platform, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { firebase } from './firebase-config';
 export default function LoggedImage ({Email}) {
@@ -11,6 +11,7 @@ export default function LoggedImage ({Email}) {
         const blob = await response.blob();
         const imageRef = firebase.storage().ref().child("profileImages/"+imageName);
         imageRef.put(blob).then(() => {
+            setImage(uri);
             alert("Image uploaded successfully to Firebase.");
         });
 
@@ -58,7 +59,15 @@ export default function LoggedImage ({Email}) {
   
     return (
     <View>
-        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+        {image && <Image source={{ uri: image }} style={styles.container} />}
         <Button title="Choose your profile picture" onPress={pickImage} />
     </View>)
 }
+const styles = StyleSheet.create({
+    container: {
+        width:'100%',
+        paddingTop:'100%',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+})
