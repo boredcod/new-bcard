@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, Button, Text, View } from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
+import {Animated, StyleSheet, Button, Text, View } from 'react-native';
 import IdMake from "./id-make";
 import RegisterMake from "./register-make";
 import { useFonts } from '@use-expo/font';
@@ -23,6 +23,7 @@ export default function NotLogged () {
     setFontsLoaded(true);
     
   }
+  
   useEffect(() => {
     // Fonts load
     loadFonts();
@@ -50,14 +51,14 @@ export default function NotLogged () {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f7f7ed',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column'
   },
   halfContainer: {
     flex: 1, 
-    backgroundColor: '#fff',
+    backgroundColor: '#f7f7ed',
     alignItems: 'center',
     justifyContent: 'center'
   },

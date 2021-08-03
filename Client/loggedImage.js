@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Text, Button, Image, View, Platform, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { firebase } from './firebase-config';
+import * as Font from 'expo-font';
 export default function LoggedImage ({Email}) {
     const [image, setImage] = useState(null);
     const storageRef = firebase.storage().ref();
+    const loadFonts = async() =>{
+        await Font.loadAsync({
+          // Fix Fonts
+          'RobotoMonoLight': require('./fonts/RobotoMono-Light.ttf')
+        });
+      }
 
     const imageUpload = async (uri,imageName) => {
         const response = await fetch(uri);
@@ -28,8 +35,8 @@ export default function LoggedImage ({Email}) {
     }, []);
 
     useEffect(()=>{
+        loadFonts();
         var starsRef = storageRef.child("profileImages/"+Email);
-
         // Get the download URL
         starsRef.getDownloadURL()
         .then((url) => {
@@ -60,14 +67,17 @@ export default function LoggedImage ({Email}) {
     return (
     <View>
         {image && <Image source={{ uri: image }} style={styles.container} />}
-        <Button title="Choose your profile picture" onPress={pickImage} />
+        <Button title="Choose your profile picture" onPress={pickImage} style={styles.text} />
     </View>)
 }
 const styles = StyleSheet.create({
     container: {
-        width:'100%',
-        paddingTop:'100%',
         justifyContent: 'center',
+        width: '100%',
+        paddingTop: '100%',
         alignItems: 'center'
+    },
+    text:{
+        fontFamily: 'RobotoMonoLight'
     }
 })

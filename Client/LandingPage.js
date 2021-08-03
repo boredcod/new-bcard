@@ -14,6 +14,7 @@ let id = true;
 export default function LandingPage () { 
   const [loggedIn, setLoggedIn] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [userId, setUserId] = useState("");
 
   const loadFonts = async() =>{
     await Font.loadAsync({
@@ -37,7 +38,8 @@ export default function LandingPage () {
           .doc(user.uid)
           .get()
           .then((document) => {
-            const userData = document.data()
+            const userData = document.data().id;
+            setUserId(userData);
             setLoggedIn(true);
           })
           .catch((error) => {
@@ -59,7 +61,7 @@ export default function LandingPage () {
 }
     return (loggedIn ? (
       <View style = {styles.profileLogout}>
-        <Profile />
+        <Profile UserId = {userId}/>
         <Button
             title="Log out"
             onPress={() => signOut()}

@@ -124,7 +124,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     elevation: 2
   },
   buttonOpen: {
