@@ -3,6 +3,13 @@ import React, { Profiler , useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Button, Image, KeyboardAvoidingView, SafeAreaView, TextInput} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import * as ImagePicker from 'expo-image-picker';
+import { NavigationContainer } from '@react-navigation/native';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem,
+} from '@react-navigation/drawer';
 import ProfileImage from './profile-image'
 import { firebase } from './firebase-config';
 import * as Font from 'expo-font';
@@ -127,6 +134,7 @@ export default function Profile({UserId}){
                     title="Edit"
                     color="#000000"
                 />
+                <Button onPress={()=>navigator.openDrawer()} title="open"/>
             </KeyboardAwareScrollView>
         </View>
     ): <View><Text>Loading</Text></View>);

@@ -10,12 +10,17 @@ import { createDrawerNavigator, DrawerContentScrollView,
   DrawerItem } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import FriendsPage from'./FriendsPage';
-import Mainpage from "./mainpage";
-
 
 
 const Drawer = createDrawerNavigator();
 let id = true;
+function MyDrawer(){
+  return (
+  <Drawer.Navigator initialRouteName="Profile">
+    <Drawer.Screen name="Profile" component={Profile}></Drawer.Screen>
+    <Drawer.Screen name="FriendsList" component={FriendsPage}></Drawer.Screen>
+</Drawer.Navigator>)
+}
 export default function LandingPage (props) { 
   const [loggedIn, setLoggedIn] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -66,17 +71,13 @@ export default function LandingPage (props) {
 }
     return (loggedIn ? (
         <NavigationContainer>
-          <Drawer.Navigator initialRouteName="Profile">
-            <Drawer.Screen name="Profile" component={Profile}></Drawer.Screen>
-            <Drawer.Screen name="FriendsList" component={FriendsPage}></Drawer.Screen>
-          </Drawer.Navigator>
+          <MyDrawer />
           <Button
             title="Log out"
             onPress={() => signOut()}
             color="#f194ff"
             style={styles.profileLogout}
           />
-          <Button title="Open Drawer" onPress={() => navigation.toggleDrawer()}/>
         </NavigationContainer>
     ) : <NotLogged />)
 } 
