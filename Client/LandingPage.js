@@ -5,13 +5,18 @@ import { firebase } from './firebase-config';
 import NotLogged from "./notloggedinpage";
 import Profile from "./profile";
 import * as Font from 'expo-font';
+import { createDrawerNavigator, DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import FriendsPage from'./FriendsPage';
 import Mainpage from "./mainpage";
 
 
 
-
+const Drawer = createDrawerNavigator();
 let id = true;
-export default function LandingPage () { 
+export default function LandingPage (props) { 
   const [loggedIn, setLoggedIn] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [userId, setUserId] = useState("");
@@ -60,15 +65,19 @@ export default function LandingPage () {
       
 }
     return (loggedIn ? (
-      <View style = {styles.profileLogout}>
-        <Profile UserId = {userId}/>
-        <Button
+        <NavigationContainer>
+          <Drawer.Navigator initialRouteName="Profile">
+            <Drawer.Screen name="Profile" component={Profile}></Drawer.Screen>
+            <Drawer.Screen name="FriendsList" component={FriendsPage}></Drawer.Screen>
+          </Drawer.Navigator>
+          <Button
             title="Log out"
             onPress={() => signOut()}
             color="#f194ff"
-       
-        />
-      </View>
+            style={styles.profileLogout}
+          />
+          <Button title="Open Drawer" onPress={() => navigation.toggleDrawer()}/>
+        </NavigationContainer>
     ) : <NotLogged />)
 } 
 
@@ -82,7 +91,6 @@ const styles = StyleSheet.create({
   },
   profileLogout:{
     flexDirection: 'column',
-    marginTop: 50
   },
   halfContainer: {
     flex: 1, 

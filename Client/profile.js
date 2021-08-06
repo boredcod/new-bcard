@@ -23,13 +23,37 @@ export default function Profile({UserId}){
           'RobotoMonoLight': require('./fonts/RobotoMono-Light.ttf')
         });
       }
+    
+    useEffect(() => {
+    // Firebase user auth
+    const usersRef = firebase.firestore().collection('users');
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+        usersRef
+            .doc(user.uid)
+            .get()
+            .then((document) => {
+            const userData = document.data().id;
+            setCurrentUserId(userData);
+            })
+            .catch((error) => {
+           
+            console.log(error);
+            });
+        } else {
+        console.log("not loaded");
+        }
+    });
+    })
     useEffect(()=>{
+    
         loadFonts();
         const usersRef = firebase.firestore().collection('users');
         usersRef
-        .doc(UserId)
+        .doc(firebase.auth().currentUser.uid)
         .get()
         .then((document) => {
+            console.log("nah")
             const userEmail = document.data().email
             const userId = document.data().id
             const userCompany = document.data().company
@@ -51,6 +75,7 @@ export default function Profile({UserId}){
             }
         })
         .catch((error) => {
+            console.log("hey")
             console.log(error);
         });
     
@@ -70,7 +95,7 @@ export default function Profile({UserId}){
     }
 
     return( loading ? (
-        <View>
+        <View style={styles.container}>
             <KeyboardAwareScrollView>
                 <ProfileImage currentUserEmail={currentUserEmail}/>
                 <TextInput
@@ -100,7 +125,7 @@ export default function Profile({UserId}){
                 <Button
                     onPress={editDoc}
                     title="Edit"
-                    color="#841584"
+                    color="#000000"
                 />
             </KeyboardAwareScrollView>
         </View>
@@ -108,7 +133,7 @@ export default function Profile({UserId}){
 }
 const styles = StyleSheet.create({
     container : {
-        flex: 1
+        marginTop: 0
     },
     log_out: {
         color: "#f194ff"
@@ -121,4 +146,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40,
         fontFamily: 'RobotoMonoLight',
       },
+    edit: {
+        fontFamily: 'RobotoMonoLight'
+    }
 })
