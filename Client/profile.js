@@ -10,11 +10,13 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import { DrawerActions } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native';
 import ProfileImage from './profile-image'
 import { firebase } from './firebase-config';
 import * as Font from 'expo-font';
 
-export default function Profile({UserId}){
+export default function Profile({navigation}){
     const [currentUserEmail, setCurrentUserEmail] = useState("");
     const [currentUserId, setCurrentUserId] = useState("");
     const [currentUserCompany, setCurrentUserCompany] = useState("");
@@ -134,7 +136,7 @@ export default function Profile({UserId}){
                     title="Edit"
                     color="#000000"
                 />
-                <Button onPress={()=>navigator.openDrawer()} title="open"/>
+                
             </KeyboardAwareScrollView>
         </View>
     ): <View><Text>Loading</Text></View>);

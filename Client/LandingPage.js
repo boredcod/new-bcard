@@ -5,22 +5,15 @@ import { firebase } from './firebase-config';
 import NotLogged from "./notloggedinpage";
 import Profile from "./profile";
 import * as Font from 'expo-font';
-import { createDrawerNavigator, DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer, useNavigation,DrawerActions } from '@react-navigation/native';
 import FriendsPage from'./FriendsPage';
 
 
-const Drawer = createDrawerNavigator();
+
+const Stack = createNativeStackNavigator();
 let id = true;
-function MyDrawer(){
-  return (
-  <Drawer.Navigator initialRouteName="Profile">
-    <Drawer.Screen name="Profile" component={Profile}></Drawer.Screen>
-    <Drawer.Screen name="FriendsList" component={FriendsPage}></Drawer.Screen>
-</Drawer.Navigator>)
-}
+
 export default function LandingPage (props) { 
   const [loggedIn, setLoggedIn] = useState(false);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -71,7 +64,10 @@ export default function LandingPage (props) {
 }
     return (loggedIn ? (
         <NavigationContainer>
-          <MyDrawer />
+          <Stack.Navigator initialRouteName="Profile">
+            <Stack.Screen name="Profile" component={Profile}/>
+            <Stack.Screen name="FriendsPage" component={FriendsPage}/>
+        </Stack.Navigator>
           <Button
             title="Log out"
             onPress={() => signOut()}

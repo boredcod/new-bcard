@@ -24,6 +24,7 @@ export default function App () {
     setFontsLoaded(true);
     
   }
+  
   useEffect(() => {
     // Fonts load
     loadFonts();
