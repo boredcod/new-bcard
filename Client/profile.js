@@ -14,6 +14,7 @@ import { DrawerActions } from '@react-navigation/native'
 import { useNavigation } from '@react-navigation/native';
 import ProfileImage from './profile-image'
 import { firebase } from './firebase-config';
+import FriendsPage from './FriendsPage'
 import * as Font from 'expo-font';
 
 export default function Profile({navigation}){
