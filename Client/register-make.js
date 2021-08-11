@@ -36,15 +36,18 @@ export default function RegisterMake (){
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then((response) => {
+         
             const uid = response.user.uid
             const data = {
                 id: uid,
                 email,
                 fullname,
+                friendslist: [],
                 company,
                 title,
                 phone
             };
+            console.log("hey");
             const usersRef = firebase.firestore().collection('users')
             usersRef
                 .doc(uid)
@@ -53,7 +56,7 @@ export default function RegisterMake (){
                     setModalVisible(false);
                 })
                 .catch((error) => {
-                    alert(error)
+                    alert("why it dont work")
                 });
         })
         .catch((error) => {
