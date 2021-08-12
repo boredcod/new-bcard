@@ -18,30 +18,67 @@ function FriendsLoop({list}){
 }
 export default function FriendsPage({navigation}){
     const [friends,setFriends] = useState([]);
+    const [addFriends, setAddFriends] = useState("");
+    const [userId, setUserId] = useState("");
     const [modalVisible, setModalVisible] = useState(false)
+    useEffect(() => {
+        setUserId(firebase.auth().currentUser.uid)
+    }, [])
     useEffect(()=>{
         const usersRef = firebase.firestore().collection('users');
-        usersRef
-        .doc(firebase.auth().currentUser.uid)
-        .get()
-        .then((document) => {
-            console.log("nah")
-            const userFriends = document.data().friendslist
-         
-            setFriends(userFriends);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        if(userId =="") {
+            usersRef
+            .doc(firebase.auth().currentUser.uid)
+            .get()
+            .then((document) => {
+                const userFriends = document.data().friendslist
+                setFriends(userFriends);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+        else{
+            usersRef
+            .doc(userId)
+            .get()
+            .then((document) => {
+                const userFriends = document.data().friendslist
+                setFriends(userFriends);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
     })
+    const searchFriends = () => {
+        firebase.database().ref('UserInfo/' + addFriends).get().then(()=>{
+            alert("User Exists")
+            setFriends(friends.push(addFriends));
+            const usersRef = firebase.firestore().collection('users');
+            usersRef.doc(userId).update({
+                friendslist: friends
+            })
+        }).catch(()=>{
+            alert("User Does Not Exist")
+        })
+    }
     return (
     <View>
         <FriendsLoop list={friends}/>
+        <TextInput style={styles.input} onChangeText={setAddFriends}></TextInput>
+        <Button title="Search" onPress={searchFriends}></Button>
     </View>)
     
 
 }
 const styles = StyleSheet.create({
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+      },
     centeredView: {
       flex: 1,
       justifyContent: "center",

@@ -2,16 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, { Profiler , useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Button, Image, KeyboardAvoidingView, SafeAreaView, TextInput} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import * as ImagePicker from 'expo-image-picker';
-import { NavigationContainer } from '@react-navigation/native';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from '@react-navigation/drawer';
-import { DrawerActions } from '@react-navigation/native'
-import { useNavigation } from '@react-navigation/native';
+
+
 import ProfileImage from './profile-image'
 import { firebase } from './firebase-config';
 import FriendsPage from './FriendsPage'
@@ -101,6 +93,12 @@ export default function Profile({navigation}){
             alert("Upload done")
         }).catch((error) => {
             alert(error)
+        })
+        const realtimeRef = firebase.database().ref('UserInfo/'+ name).set({
+            company: currentUserCompany,
+            phone: currentUserPhone,
+            title: currentUserTitle,
+            email: currentUserEmail
         })
     }
 
