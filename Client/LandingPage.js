@@ -60,7 +60,7 @@ export default function LandingPage ({navigation}) {
   useEffect(() => {
     // Fonts load
     loadFonts();
-  });
+  },[]);
 
   useEffect(() => {
     // Firebase user auth

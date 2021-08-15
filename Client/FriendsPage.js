@@ -11,11 +11,12 @@ function FriendProfile({name}){
     const storageRef = firebase.storage().ref();
     const dbRef = firebase.database().ref();
     const [image, setImage] = useState(null);
+    let useremail;
     const imgSearch = (dude) => {
-        let email;
-        dbRef.child("UserInfo").child(dude).get().then((data)=>{
-            email = data.email
-
+        
+        firebase.database().ref("UserInfo").child("Joon").get().then((data)=>{
+            console.log(data.email)
+            useremail = data.email
         })
        
         var starsRef = storageRef.child("profileImages/Joon@gmail.com");
@@ -33,7 +34,7 @@ function FriendProfile({name}){
     imgSearch(name)
     return (
         <View key={name}>
-            {image && <Image source={{uri:image}}/>}
+            {image && <Image source={{uri:image}} style={styles.container}/>}
             <Text>{name}</Text>
         </View>
     )
@@ -83,15 +84,19 @@ export default function FriendsPage({navigation}){
                 console.log(error);
             });
         }
-    })
+    }, [])
     const searchFriends = () => {
-        firebase.database().ref('UserInfo/' + addFriends).get().then(()=>{
-            alert("User Exists")
-            setFriends(friends.push(addFriends));
+        firebase.database().ref('UserInfo/' + addFriends.substr(0,addFriends.indexOf('@'))).get().then(()=>{
+            console.log(addFriends)
+            setFriends(friends.concat([addFriends]));
+            
             const usersRef = firebase.firestore().collection('users');
+           
             usersRef.doc(userId).update({
                 friendslist: friends
             })
+            alert("friend added")
+            console.log(friends)
         }).catch(()=>{
             alert("User Does Not Exist")
         })
@@ -99,7 +104,7 @@ export default function FriendsPage({navigation}){
     return (
     <View>
         <TextInput style={styles.input} onChangeText={setAddFriends}></TextInput>
-        <Button title="Search" onPress={searchFriends}></Button>
+        <Button title="Search By Email" onPress={searchFriends}></Button>
         <FriendsLoop list={friends}/>
     </View>)
     
@@ -118,6 +123,12 @@ const styles = StyleSheet.create({
       alignItems: "center",
       marginTop: 0
     },
+    container: {
+        justifyContent: 'center',
+        width: '50%',
+        paddingTop: '50%',
+        alignItems: 'center'
+    }
     
   });
   

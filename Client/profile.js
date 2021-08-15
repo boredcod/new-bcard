@@ -46,7 +46,7 @@ export default function Profile({navigation}){
         console.log("not loaded");
         }
     });
-    })
+    },[])
     useEffect(()=>{
     
         loadFonts();
@@ -81,7 +81,7 @@ export default function Profile({navigation}){
             console.log(error);
         });
     
-    })
+    },[])
     const editDoc = () => {
         console.log(currentUserCompany)
         const usersRef = firebase.firestore().collection('users').doc(currentUserId);
@@ -94,7 +94,7 @@ export default function Profile({navigation}){
         }).catch((error) => {
             alert(error)
         })
-        const realtimeRef = firebase.database().ref('UserInfo/'+ name).set({
+        const realtimeRef = firebase.database().ref('UserInfo/'+ (currentUserEmail.substr(0,currentUserEmail.indexOf('@')))).set({
             company: currentUserCompany,
             phone: currentUserPhone,
             title: currentUserTitle,

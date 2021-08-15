@@ -24,7 +24,7 @@ export default function RegisterMake (){
   useEffect(() => {
     // Fonts load
     loadFonts();
-  });
+  },[]);
 
   const onLoginPress = () => {
     firebase

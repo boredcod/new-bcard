@@ -45,7 +45,7 @@ export default function LoggedImage ({Email}) {
         .catch((error) => {
             console.log(error)
         });
-    })
+    },[])
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({

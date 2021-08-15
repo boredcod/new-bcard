@@ -25,7 +25,7 @@ export default function RegisterMake (){
   useEffect(() => {
     // Fonts load
     loadFonts();
-  });
+  },[]);
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {

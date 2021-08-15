@@ -27,7 +27,7 @@ export default function NotLogged () {
   useEffect(() => {
     // Fonts load
     loadFonts();
-  });
+  },[]);
 
   return (
     <View style={styles.container}>
