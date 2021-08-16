@@ -1,41 +1,42 @@
 import React, {useState, useEffect} from 'react';
 import { Button } from 'react-native';
-import { Alert, Modal, StyleSheet, Text, Pressable, View, SafeAreaView, TextInput, Image} from "react-native";
+import { Alert, Modal, StyleSheet, Text, ScrollView, View, SafeAreaView, TextInput, Image, TouchableHighlight} from "react-native";
 import { firebase } from './firebase-config';
 import NotLogged from "./notloggedinpage";
 import Profile from "./profile";
 import * as Font from 'expo-font';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
+
 function FriendProfile({name}){
     const storageRef = firebase.storage().ref();
     const dbRef = firebase.database().ref();
     const [image, setImage] = useState(null);
     let useremail;
     const imgSearch = (dude) => {
-        
-        firebase.database().ref("UserInfo").child("Joon").get().then((data)=>{
-            console.log(data.email)
-            useremail = data.email
-        })
-       
-        var starsRef = storageRef.child("profileImages/Joon@gmail.com");
+        var starsRef = storageRef.child("profileImages/"+dude);
         // Get the download URL
         starsRef.getDownloadURL()
         .then((url) => {
             setImage(url)
         })
         .catch((error) => {
-    
-
-
+            console.log(error)
         });
     }
     imgSearch(name)
     return (
-        <View key={name}>
-            {image && <Image source={{uri:image}} style={styles.container}/>}
-            <Text>{name}</Text>
+        <View style={styles.smallProfile} key={name}>
+            
+            {image && <Image source={{uri:image}} style={styles.profileImage}/>}
+            <View> 
+                <Text>{name}</Text>
+                <TouchableHighlight onPress ={()=>console.log("touch LD")} >
+                    <Text>Additional Info</Text>
+                </TouchableHighlight>
+            </View>
+            
+            
         </View>
     )
 }
@@ -84,17 +85,17 @@ export default function FriendsPage({navigation}){
                 console.log(error);
             });
         }
-    }, [])
+    },[])
     const searchFriends = () => {
         firebase.database().ref('UserInfo/' + addFriends.substr(0,addFriends.indexOf('@'))).get().then(()=>{
             console.log(addFriends)
-            setFriends(friends.concat([addFriends]));
-            
+            let newFriends = friends.concat([addFriends]);
             const usersRef = firebase.firestore().collection('users');
-           
             usersRef.doc(userId).update({
-                friendslist: friends
+                friendslist: newFriends
             })
+            setFriends(friends.concat([addFriends]))
+
             alert("friend added")
             console.log(friends)
         }).catch(()=>{
@@ -102,12 +103,14 @@ export default function FriendsPage({navigation}){
         })
     }
     return (
-    <View>
-        <TextInput style={styles.input} onChangeText={setAddFriends}></TextInput>
-        <Button title="Search By Email" onPress={searchFriends}></Button>
-        <FriendsLoop list={friends}/>
-    </View>)
-    
+    <SafeAreaView style={styles.container}>
+        <ScrollView>
+            <TextInput style={styles.input} onChangeText={setAddFriends}></TextInput>
+            <Button title="Search By Email" onPress={searchFriends}></Button>
+            <FriendsLoop list={friends}/>
+        </ScrollView>
+    </SafeAreaView>
+    )
 
 }
 const styles = StyleSheet.create({
@@ -123,11 +126,18 @@ const styles = StyleSheet.create({
       alignItems: "center",
       marginTop: 0
     },
-    container: {
+    profileImage: {
         justifyContent: 'center',
-        width: '50%',
-        paddingTop: '50%',
+        width: '40%',
+        paddingTop: '40%',
         alignItems: 'center'
+    },
+    container:{
+        flex: 1
+    },
+    smallProfile:{
+        flex:1,
+        flexDirection: 'row'
     }
     
   });
