@@ -98,7 +98,8 @@ export default function Profile({navigation}){
             company: currentUserCompany,
             phone: currentUserPhone,
             title: currentUserTitle,
-            email: currentUserEmail
+            email: currentUserEmail,
+            name: name
         })
     }
 

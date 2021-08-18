@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Button } from 'react-native';
-import { Alert, Modal, StyleSheet, Text, ScrollView, View, SafeAreaView, TextInput, Image, TouchableHighlight} from "react-native";
+import { Alert, Modal, StyleSheet, Text, ScrollView, View, SafeAreaView, TextInput, Image, TouchableHighlight, Pressable} from "react-native";
 import { firebase } from './firebase-config';
 import NotLogged from "./notloggedinpage";
 import Profile from "./profile";
@@ -10,8 +10,14 @@ import { NavigationContainer } from '@react-navigation/native';
 
 function FriendProfile({name}){
     const storageRef = firebase.storage().ref();
+    const [isLoading, setIsLoading] = useState(false);
     const dbRef = firebase.database().ref();
     const [image, setImage] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [currentCompany, setCurrentCompany] = useState("");
+    const [currentTitle, setCurrentTitle] = useState("");
+    const [currentPhone, setCurrentPhone] = useState("");
+    const [currentFullname, setCurrentFullname] = useState("");
     let useremail;
     const imgSearch = (dude) => {
         var starsRef = storageRef.child("profileImages/"+dude);
@@ -24,20 +30,58 @@ function FriendProfile({name}){
             console.log(error)
         });
     }
+    const profileSearch = (useremail) => {
+        firebase.database().ref('UserInfo/' + useremail).get().then((userInfo)=>{
+            console.log(userInfo.val().company)
+            setCurrentCompany(userInfo.val().company)
+            setCurrentTitle(userInfo.val().title)
+            setCurrentPhone(userInfo.val().phone)
+            setCurrentFullname(userInfo.val().name)
+            setIsLoading(true)
+        }).catch(()=>{
+            alert(currentCompany)
+        })
+    }
     imgSearch(name)
-    return (
-        <View style={styles.smallProfile} key={name}>
-            
+    profileSearch(name.substr(0,name.indexOf('@')))
+    
+
+    return (isLoading ? 
+        (<View style={styles.smallProfile} key={name}>
             {image && <Image source={{uri:image}} style={styles.profileImage}/>}
             <View> 
                 <Text>{name}</Text>
-                <TouchableHighlight onPress ={()=>console.log("touch LD")} >
-                    <Text>Additional Info</Text>
-                </TouchableHighlight>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                    setModalVisible(!modalVisible);
+                    }}
+                >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.textStyle}>HI</Text>
+                        <Text style={styles.textStyle}>{currentCompany}</Text>
+                        <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => setModalVisible(!modalVisible)}
+                        >
+                        <Text style={styles.textStyle}>Hide Modal</Text>
+                        </Pressable>
+                    </View>
+                </View>
+                </Modal>
+                <Pressable
+                    style={[styles.button, styles.buttonOpen]}
+                    onPress={() => setModalVisible(true)}
+                >
+                    <Text style={styles.textStyle}>Additional Information</Text>
+                </Pressable>
             </View>
             
             
-        </View>
+        </View>) : <View><Text>Loading</Text></View>
     )
 }
 function FriendsLoop({list}){
@@ -138,7 +182,48 @@ const styles = StyleSheet.create({
     smallProfile:{
         flex:1,
         flexDirection: 'row'
-    }
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+      },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+      },
+      button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+      },
+      buttonOpen: {
+        backgroundColor: "#F194FF",
+      },
+      buttonClose: {
+        backgroundColor: "#2196F3",
+      },
+      textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+      }
     
   });
   
