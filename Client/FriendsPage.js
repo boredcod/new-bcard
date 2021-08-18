@@ -32,11 +32,12 @@ function FriendProfile({name}){
     }
     const profileSearch = (useremail) => {
         firebase.database().ref('UserInfo/' + useremail).get().then((userInfo)=>{
-            console.log(userInfo.val().company)
+           
             setCurrentCompany(userInfo.val().company)
             setCurrentTitle(userInfo.val().title)
             setCurrentPhone(userInfo.val().phone)
             setCurrentFullname(userInfo.val().name)
+            console.log(currentCompany)
             setIsLoading(true)
         }).catch(()=>{
             alert(currentCompany)
@@ -61,8 +62,9 @@ function FriendProfile({name}){
                 >
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                        <Text style={styles.textStyle}>HI</Text>
-                        <Text style={styles.textStyle}>{currentCompany}</Text>
+                        <Text style={styles.textStyle}>Name: {currentFullname}</Text>
+                        <Text style={styles.textStyle}>Company: {currentCompany}</Text>
+                        <Text style={styles.textStyle}>Title: {currentTitle}</Text>
                         <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => setModalVisible(!modalVisible)}
@@ -216,7 +218,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#2196F3",
       },
       textStyle: {
-        color: "white",
         fontWeight: "bold",
         textAlign: "center"
       },
